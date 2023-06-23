@@ -1,0 +1,232 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BREAD</title>
+</head>
+<body>
+ <div class="container">
+  <div class="card">
+    <div class="card-header text-center">
+      <h1>Bread</h1>
+    </div>
+    <div class="card-body">
+      <form action=""></form>
+    </div>
+    <div class="card-footer">
+
+    </div>
+  </div>
+ </div>
+  
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BREAD (Browse,Read,Edit,Add,Delete)</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://kit.fontawesome.com/6ea2cb925f.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <h1>BREAD(Browse,Read,Edit,Add,Delete)</h1>
+    <h2>Filters </h2>
+    <div class="container">
+        <form action="" method="get">
+            <input type="hidden" name="page" value="1">
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label" for="id">
+                    <input type="checkbox" id="checkid" name="checkboxid" <%=(typeof query !=='undefined' &&
+                        query.checkboxid) ? "checked" : "" %>>
+                    ID
+                </label>
+                <div class="col-sm-10">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label" for="string">
+                    <input type="checkbox" id="string" name="checkboxString" <%=(typeof query !=='undefined' &&
+                        query.checkboxString) ? "checked" : "" %>>
+                    String
+                </label>
+                <div class="col-sm-10">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label" for="integer">
+                    <input type="checkbox" id="integer" name="checkboxInteger" <%=(typeof query !=='undefined' &&
+                        query.checkboxString) ? "checked" : "" %>>
+                    Integer
+                </label>
+                <div class="col-sm-10">
+                </div>
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" for="float">
+                        <input type="checkbox" id="float" name="checkboxFloat" <%=(typeof query !=='undefined' &&
+                            query.checkboxString) ? "checked" : "" %>>
+                        Float
+                    </label>
+                    <div class="col-sm-10">
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label" for="date">
+                            <input type="checkbox" id="date" name="checkboxDate" <%=(typeof query !=='undefined' &&
+                                query.checkboxDate) ? "checked" : "" %>>
+                            Date
+                        </label>
+                        <div class="col-sm-10">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-sm-2 col-form-label" for="boolean">
+                            <input type="checkbox" id="Boolean" name="checkboxBoolean" <%=(typeof query !=='undefined'
+                                && query.checkboxBoolean) ? "checked" : "" %>>
+                            Boolean
+                        </label>
+                        <div class="col-sm-10">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Search</button>
+                    <a href="/" class="btn btn-primary">Reset</a>
+                </div>
+        </form>
+        <table class="table table-success table-striped" border="1" id="customers">
+            <tr>
+                <th>
+                    <a
+                        href="?sort=id&order=<%=(typeof query !== 'undefined' && query.order === 'asc' && query.sort === 'id') ? 'desc' : 'asc' %>&page=<%= typeof page !== 'undefined' ? page : '' %>">
+                        <% if (typeof query !=='undefined' && query.sort==='id' ) { %>
+                            <% if (query.order==='asc' ) { %>
+                                <i class="fa fa-sort-asc"></i>
+                                <% } else { %>
+                                    <i class="fa fa-sort-desc"></i>
+                                    <% } %>
+                                        <% } %>
+                                            ID
+                    </a>
+                </th>
+                <th>
+                    <a
+                        href="?sort=String&order=<%=(typeof query !== 'undefined' && query.order === 'asc' && query.sort === 'String') ? 'desc' : 'asc' %>&page=<%= typeof page !== 'undefined' ? page : '' %>">
+                        <% if (typeof query !=='undefined' && query.sort==='String' ) { %>
+                            <% if (query.order==='asc' ) { %>
+                                <i class="fa fa-sort-asc"></i>
+                                <% } else { %>
+                                    <i class="fa fa-sort-desc"></i>
+                                    <% } %>
+                                        <% } %>
+                                            String
+                    </a>
+                </th>
+                <th>
+                    <a
+                        href="?sort=Integer&order=<%=(typeof query !== 'undefined' && query.order === 'asc' && query.sort === 'Integer') ? 'desc' : 'asc' %>&page=<%= typeof page !== 'undefined' ? page : '' %>">
+                        <% if (typeof query !=='undefined' && query.sort==='Integer' ) { %>
+                            <% if (query.order==='asc' ) { %>
+                                <i class="fa fa-sort-asc"></i>
+                                <% } else { %>
+                                    <i class="fa fa-sort-desc"></i>
+                                    <% } %>
+                                        <% } %>
+                                            Integer
+                    </a>
+                </th>
+                <th>
+                    <a
+                        href="?sort=Float&order=<%=(typeof query !== 'undefined' && query.order === 'asc' && query.sort === 'Float') ? 'desc' : 'asc' %>&page=<%= typeof page !== 'undefined' ? page : '' %>">
+                        <% if (typeof query !=='undefined' && query.sort==='Float' ) { %>
+                            <% if (query.order==='asc' ) { %>
+                                <i class="fa fa-sort-asc"></i>
+                                <% } else { %>
+                                    <i class="fa fa-sort-desc"></i>
+                                    <% } %>
+                                        <% } %>
+                                            Float
+                    </a>
+                </th>
+                <th>
+                    <a
+                        href="?sort=Date&order=<%=(typeof query !== 'undefined' && query.order === 'asc' && query.sort === 'Date') ? 'desc' : 'asc' %>&page=<%= typeof page !== 'undefined' ? page : '' %>">
+                        <% if (typeof query !=='undefined' && query.sort==='Date' ) { %>
+                            <% if (query.order==='asc' ) { %>
+                                <i class="fa fa-sort-asc"></i>
+                                <% } else { %>
+                                    <i class="fa fa-sort-desc"></i>
+                                    <% } %>
+                                        <% } %>
+                                            Date
+                    </a>
+                </th>
+                <th>
+                    <a
+                        href="?sort=Boolean&order=<%=(typeof query !== 'undefined' && query.order === 'asc' && query.sort === 'Boolean') ? 'desc' : 'asc' %>&page=<%= typeof page !== 'undefined' ? page : '' %>">
+                        <% if (typeof query !=='undefined' && query.sort==='Boolean' ) { %>
+                            <% if (query.order==='asc' ) { %>
+                                <i class="fa fa-sort-asc"></i>
+                                <% } else { %>
+                                    <i class="fa fa-sort-desc"></i>
+                                    <% } %>
+                                        <% } %>
+                                            Boolean
+                    </a>
+                </th>
+                <th>Actions</th>
+            </tr>
+            <% bread.forEach((item, index)=> { %>
+                <tr>
+                    <td>
+                        <%= item.id %>
+                    </td>
+                    <td>
+                        <%= item.string %>
+                    </td>
+                    <td>
+                        <%= item.integer %>
+                    </td>
+                    <td>
+                        <%= item.float %>
+                    </td>
+                    <td>
+                        <%= moment(item.date).format('MM-DD-YYYY') %>
+                    </td>
+                    <td>
+                        <%= item.boolean %>
+                    </td>
+                    <td><a type="button" class="btn btn-success" href="/ubah/<%= item.id %>">Edit</a> &nbsp;
+                        <a type="button" class="btn btn-danger" href="/hapus/<%= item.id %>">Delete</a>
+                    </td>
+                </tr>
+                <% }) %>
+        </table>
+        <a href="/Add" class="btn btn-primary" type="submit">Add</a>
+        <br>
+        <br>
+        <div class="pagination">
+            <% if (page> 1) { %>
+                <a href="<%= url.replace(`page=${page}`, `page=${page-1}`) %>">Previous</a>
+                <% } %>
+
+                    <% for (let i=1; i <=pages; i++) { %>
+                        <a class="<%= page == i ? 'active' : '' %>"
+                            href="<%= url.replace(`page=${page}`, `page=${i}`) %>">
+                            <%= i %>
+                        </a>
+                        <% } %>
+
+                            <% if (page < pages) { %>
+                                <a
+                                    href="<%= url.replace(`page=${parseInt(page)}`, `page=${parseInt(page)+1}`) %>">Next</a>
+                                <% } %>
+        </div>
+</body>
+
+</html>

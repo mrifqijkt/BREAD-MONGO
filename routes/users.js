@@ -1,9 +1,67 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
+module.exports = function (db) {
 
-module.exports = router;
+  const collection = db.collection('users')
+
+  router.get('/', async function (req, res, next) {
+
+    const { page = 1, id, string, integer, float, date, boolean, sortBy = '_id', sortMode = 'asc' } = req.query
+
+    const params = {}
+
+    const sortParams = {}
+    sortParams[sortBy] = sortMode == 'asc' ? 1 : -1
+
+    if(id){
+      params ['id'] = id
+      
+    }
+
+    if(string){
+      params ['string'] = new RegExp(string, 'i')
+      
+    }
+
+    if(integer){
+      params ['integer'] = integer
+      
+    }
+
+    if(float){
+      params ['float'] = float
+      
+    }
+
+    if(date){
+      params ['date'] = new Date(date)
+      
+    }
+
+    if(boolean){
+      params ['boolean'] = boolean
+      
+    }
+
+    const limit = 3
+
+    const offset = (page - 1) * limit
+    
+    const total = await collection.find(params).count();
+
+    const pages = Math.ceil(total/limit);
+
+    console.log(params)
+
+    const users = await collection.find(params,{sort: sortParams}).limit(limit).skip(offset).toArray();
+    res.json({users, page: parseInt(page), pages})
+  });
+
+  router.post('/', async function (req, res, next) {
+    const user = await collection.insertOne({ id: parseInt(req.body.id), string: req.body.string, integer: parseInt(req.body.integer), float: parseFloat(req.body.float), date: new Date(req.body.date), boolean: JSON.parse(req.body.boolean) });
+    res.json(user)
+  });
+
+  return router;
+}
