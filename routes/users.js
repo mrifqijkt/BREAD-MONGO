@@ -7,55 +7,58 @@ module.exports = function (db) {
 
   router.get('/', async function (req, res, next) {
 
-    const { page = 1, id, string, integer, float, date, boolean, sortBy = '_id', sortMode = 'asc' } = req.query
-
+    const { page = 1, id, string, integer, float, stardate, enddate, boolean, sortBy = '_id', sortMode = 'asc' } = req.query
     const params = {}
 
     const sortParams = {}
     sortParams[sortBy] = sortMode == 'asc' ? 1 : -1
 
-    if(id){
-      params ['id'] = id
-      
+    if (id) {
+      params['id'] = id
+
     }
 
-    if(string){
-      params ['string'] = new RegExp(string, 'i')
-      
+    if (string) {
+      params['string'] = new RegExp(string, 'i')
+
     }
 
-    if(integer){
-      params ['integer'] = integer
-      
+    if (integer) {
+      params['integer'] = integer
+
     }
 
-    if(float){
-      params ['float'] = float
-      
+    if (float) {
+      params['float'] = float
+
     }
 
-    if(date){
-      params ['date'] = new Date(date)
-      
+    if (stardate && enddate) {
+      params['date'] = { $gte: new Date(stardate), $lte: new Date(enddate) }
+
+    } else if (stardate) {
+      params['date'] = { $gte: new Date(stardate) }
+    } else if (enddate) {
+      params['date'] = { $lte: new Date(enddate) }
     }
 
-    if(boolean){
-      params ['boolean'] = boolean
-      
+    if (boolean) {
+      params['boolean'] = boolean
+
     }
 
     const limit = 3
 
     const offset = (page - 1) * limit
-    
+
     const total = await collection.find(params).count();
 
-    const pages = Math.ceil(total/limit);
+    const pages = Math.ceil(total / limit);
 
     console.log(params)
 
-    const users = await collection.find(params,{sort: sortParams}).limit(limit).skip(offset).toArray();
-    res.json({users, page: parseInt(page), pages})
+    const users = await collection.find(params).sort(sortParams).limit(limit).skip(offset).toArray();
+    res.json({ users, page: parseInt(page), pages })
   });
 
   router.post('/', async function (req, res, next) {
