@@ -55,8 +55,6 @@ module.exports = function (db) {
 
     const pages = Math.ceil(total / limit);
 
-    console.log(params)
-
     const users = await collection.find(params).sort(sortParams).limit(limit).skip(offset).toArray();
     res.json({ users, page: parseInt(page), pages })
   });
