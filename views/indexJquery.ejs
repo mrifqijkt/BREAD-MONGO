@@ -21,15 +21,6 @@
         <h2>Filter</h2>
         <form id="form-search">
             <div class="row mb-3">
-                <label for="id" class="col-sm-3 col-form-label">
-                    <input type="checkbox" id="checkboxId" name="checkboxId">
-                    ID
-                </label>
-                <div class="col-sm-9">
-                    <input type="number" class="form-control" id="id" name="id" placeholder="ID">
-                </div>
-            </div>
-            <div class="row mb-3">
                 <label for="string" class="col-sm-3 col-form-label">
                     <input type="checkbox" id="checkboxString" name="checkboxString">
                     String
@@ -53,7 +44,7 @@
                     Float
                 </label>
                 <div class="col-sm-9">
-                    <input type="number" step="any" class="form-control" id="float" name="float" placeholder="float">
+                    <input type="number" step="any" class="form-control" id="float" name="float" placeholder="Float">
                 </div>
             </div>
             <div class="row mb-3">
@@ -62,11 +53,11 @@
                     Date
                 </label>
                 <div class="col-sm-9">
-                    <input class="form-control" placeholder="startDate" name="startDate" type="text"
-                        onfocus="(this.type='date')" onblur="(this.type='text')" id="startDate" />
+                    <input class="form-control" placeholder="startdate" name="startdate" type="text"
+                        onfocus="(this.type='date')" onblur="(this.type='text')" id="startdate" />
                     to
-                    <input class="form-control" placeholder="endDate" name="endDate" type="text"
-                        onfocus="(this.type='date')" onblur="(this.type='text')" id="endDate" />
+                    <input class="form-control" placeholder="enddate" name="enddate" type="text"
+                        onfocus="(this.type='date')" onblur="(this.type='text')" id="enddate" />
                 </div>
             </div>
             <div class="row mb-3">
@@ -97,15 +88,60 @@
     </table>
     <div class="card-footer">
         <nav id="pagination" aria-label="Page navigation example">
-
         </nav>
+
+        <!-- form add -->
+
+        <form id="form-add">
+            <h1>Add Data</h1>
+            <div class="container">
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" for="astring">String</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" type="text" id="astring" name="String" placeholder="String">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" for="ainteger">Integer</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" type="number" id="ainteger" name="Integer" step="any"
+                            placeholder="Integer">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" for="afloat">Float</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" type="number" id="afloat" name="Float" step="any"
+                            placeholder="Float">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" for="adate">Date</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" type="date" id="adate" name="Date" placeholder="end date">
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" for="aboolean">Boolean</label>
+                    <div class="col-sm-10">
+                        <select class="form-control" style="background-color: white;" id="aboolean" name="Boolean">
+                            <option value="">Choose the boolean...</option>
+                            <option value="true">True</option>
+                            <option value="false">False</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </form>
+
     </div>
     </div>
     </div>
     <script>
         let params = {
             page: 1,
-
         }
 
         $(document).ready(function () {
@@ -115,6 +151,16 @@
                 event.preventDefault()
                 searchData()
             })
+
+            $('#form-add').submit(function (event) {
+                event.preventDefault()
+                addData()
+            })
+
+            $(document).on("click", ".delete-user", function () {
+                const id = $(this).data("id");
+                deleteUser(id);
+            });
         })
 
         const loadData = () => {
@@ -127,7 +173,7 @@
                 data.users.forEach((user, index) => {
                     html += `
                     <tr>
-                    <td>${index + 1}</td>
+                    <td>${index + 1 + data.offset}</td>
                     <td>${user.string}</td>
                     <td>${user.integer}</td>
                     <td>${user.float}</td>
@@ -135,7 +181,7 @@
                     <td>${user.boolean}</td>
                     <td>
                         <button class="btn btn-success" type="button">Edit</button>
-                        <button class="btn btn-danger" type="button">Delete</button>
+                        <button class="btn btn-danger" type="button" onclick="deleteUser('${user._id}')">Delete</button>
                     </td>
                 </tr>
                 `
@@ -182,15 +228,13 @@
         }
 
         const searchData = () => {
-            const id = $('#id').val()
             const string = $('#string').val()
             const integer = $('#integer').val()
             const float = $('#float').val()
             const stardate = $('#stardate').val()
             const enddate = $('#enddate').val()
             const boolean = $('#boolean').val()
-            console.log(id, string, integer, float, stardate, enddate, boolean)
-            params = { ...params, id, string, integer, float, stardate, enddate, boolean }
+            params = { ...params, string, integer, float, stardate, enddate, boolean }
             loadData()
         }
 
@@ -204,7 +248,7 @@
 
         const sort = (sortBy, sortMode) => {
             let html = ` <tr>
-                    <th>ID <i class="fa-solid fa-sort${sortBy == 'id' ? sortMode == 'asc' ? '-up' : '-down' : ''}" onClick="sort('id','${sortMode == 'asc' ? 'desc' : 'asc'}')"></i></th>
+                    <th>No</th>
                     <th>String <i class="fa-solid fa-sort${sortBy == 'string' ? sortMode == 'asc' ? '-up' : '-down' : ''}" onClick="sort('string','${sortMode == 'asc' ? 'desc' : 'asc'}')"></i></th>
                     <th>Integer <i class="fa-solid fa-sort${sortBy == 'integer' ? sortMode == 'asc' ? '-up' : '-down' : ''}" onClick="sort('integer','${sortMode == 'asc' ? 'desc' : 'asc'}')"></i></th>
                     <th>Float <i class="fa-solid fa-sort${sortBy == 'float' ? sortMode == 'asc' ? '-up' : '-down' : ''}" onClick="sort('float','${sortMode == 'asc' ? 'desc' : 'asc'}')"></i></th>
@@ -216,7 +260,43 @@
             params = { ...params, sortBy, sortMode }
             loadData()
         }
-        
+
+        const addData = () => {
+            const string = $("#astring").val()
+            const integer = $("#ainteger").val()
+            const float = $("#afloat").val()
+            const date = $("#adate").val()
+            const boolean = $("#aboolean").val()
+
+            $.ajax({
+                method: "POST",
+                url: '/users',
+                data: { string, integer, float, date, boolean },
+                dataType: 'json'
+            }).done(function (data) {
+                loadData()
+                $("#astring").val('')
+                $("#ainteger").val('')
+                $("#afloat").val('')
+                $("#adate").val('')
+                $("#aboolean").val('')
+            })
+        }
+
+        const deleteUser = (id) => {
+            $.ajax({
+                url: `/users/${id}`,
+                method: "DELETE",
+                success: function (data) {
+                    deleteUser();
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        }
+
+
     </script>
 </body>
 
