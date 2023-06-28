@@ -21,6 +21,15 @@
         <h2>Filter</h2>
         <form id="form-search">
             <div class="row mb-3">
+                <label for="id" class="col-sm-3 col-form-label">
+                    <input type="checkbox" id="checkboxId" name="checkboxId">
+                    ID
+                </label>
+                <div class="col-sm-9">
+                    <input type="number" class="form-control" id="id" name="id" placeholder="ID">
+                </div>
+            </div>
+            <div class="row mb-3">
                 <label for="string" class="col-sm-3 col-form-label">
                     <input type="checkbox" id="checkboxString" name="checkboxString">
                     String
@@ -136,6 +145,62 @@
             <button type="submit" class="btn btn-primary">Save</button>
         </form>
 
+        <!-- form edit -->
+
+        <form id="edit-form">
+            <br>
+            <div class="row mb-3">
+                <h1>Edit Data</h1>
+            </div>
+            <div class="row mb-3" hidden>
+                <label for="idEdit" class="col-sm-4 col-form-label">ID</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" id="idEdit" name="id" disabled>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="eid" class="col-sm-4 col-form-label">ID</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" id="eid" name="id" disabled>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="estring" class="col-sm-4 col-form-label">String</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" id="estring" name="String">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="einteger" class="col-sm-4 col-form-label">Integer</label>
+                <div class="col-sm-8">
+                    <input type="number" class="form-control" id="einteger" name="Integer">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="efloat" class="col-sm-4 col-form-label">Float</label>
+                <div class="col-sm-8">
+                    <input type="number" step="any" class="form-control" id="efloat" name="Float">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="edate" class="col-sm-4 col-form-label">Date</label>
+                <div class="col-sm-8">
+                    <input type="date" class="form-control" id="edate" name="Date">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="eboolean" class="col-sm-4 col-form-label">Boolean</label>
+                <div class="col-sm-8">
+                    <select class="form-select" id="eboolean" name="Boolean">
+                        <option>Choose the boolean</option>
+                        <option value="true">True</option>
+                        <option value="false">False</option>
+                    </select>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Edit Data</button>
+        </form>
+
     </div>
     </div>
     </div>
@@ -160,7 +225,7 @@
             $(document).on("click", ".delete-user", function () {
                 const id = $(this).data("id");
                 deleteUser(id);
-            });
+            })
         })
 
         const loadData = () => {
@@ -181,7 +246,8 @@
                     <td>${user.boolean}</td>
                     <td>
                         <button class="btn btn-success" type="button">Edit</button>
-                        <button class="btn btn-danger" type="button" onclick="deleteUser('${user._id}')">Delete</button>
+                        <button class="btn btn-danger delete-user" type="button" data-id="${user._id}">Delete</button>
+
                     </td>
                 </tr>
                 `
@@ -228,13 +294,14 @@
         }
 
         const searchData = () => {
+            const id = $('#id').val()
             const string = $('#string').val()
             const integer = $('#integer').val()
             const float = $('#float').val()
             const stardate = $('#stardate').val()
             const enddate = $('#enddate').val()
             const boolean = $('#boolean').val()
-            params = { ...params, string, integer, float, stardate, enddate, boolean }
+            params = { ...params, id, string, integer, float, stardate, enddate, boolean }
             loadData()
         }
 
@@ -262,6 +329,7 @@
         }
 
         const addData = () => {
+            const id = $("#id").val()
             const string = $("#astring").val()
             const integer = $("#ainteger").val()
             const float = $("#afloat").val()
@@ -271,10 +339,11 @@
             $.ajax({
                 method: "POST",
                 url: '/users',
-                data: { string, integer, float, date, boolean },
+                data: { id, string, integer, float, date, boolean },
                 dataType: 'json'
             }).done(function (data) {
                 loadData()
+                $("#id").val('')
                 $("#astring").val('')
                 $("#ainteger").val('')
                 $("#afloat").val('')
@@ -288,13 +357,14 @@
                 url: `/users/${id}`,
                 method: "DELETE",
                 success: function (data) {
-                    deleteUser();
+                    loadData();
                 },
                 error: function (error) {
                     console.log(error);
                 }
             });
-        }
+        };
+
 
 
     </script>
