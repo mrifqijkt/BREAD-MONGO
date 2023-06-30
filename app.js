@@ -3,26 +3,26 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-
-const { MongoClient } = require('mongodb');   
-
+const { MongoClient } = require('mongodb');
 
 async function main() {
-
- 
-  const url = 'mongodb://localhost:27017';
+  // Connection URL
+  const url = 'mongodb://127.0.0.1:27017';
   const client = new MongoClient(url);
+
+  // Database Name
   const dbName = 'bread';
 
+
+  // Use connect method to connect to the server
   await client.connect();
   console.log('Connected successfully to server');
   const db = client.db(dbName);
-  return db;
+  return db
 }
 
 main()
   .then((db) => {
-
     var indexRouter = require('./routes/index')(db);
     var usersRouter = require('./routes/users')(db);
 
@@ -56,8 +56,7 @@ main()
       res.status(err.status || 500);
       res.render('error');
     });
-
-    var debug = require('debug')('bread-mongo:server');
+    var debug = require('debug')('breadmongo:server');
     var http = require('http');
 
     /**
