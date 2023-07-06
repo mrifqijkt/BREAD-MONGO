@@ -81,10 +81,12 @@
           </select>
         </div>
       </div>
-      <div class="row mb-3" style="text-align: center;">
+      <br>
+      <div>
           <button type="submit" class="btn btn-primary" style="width: 10%;">Search</button>
-          <a type="button" class="btn btn-primary" href="/" style="width: 10%;">Reset</a>
+          <a type="button" class="btn btn-secondary" href="/" style="width: 10%;">Reset</a>
       </div>
+      <br>
     </form>
     <div class="row mb-3">
       <table class="table table-striped">
@@ -95,7 +97,6 @@
       </table>
       <nav id="pagination" aria-label="Page navigation example">
       </nav>
-
       <!-- add form -->
       <form id="create-form" style="display: none;">
         <br>
@@ -108,7 +109,7 @@
             ID
           </label>
           <div class="col-sm-8">
-            <input type="text" class="form-control" id="id" name="id">
+            <input type="text" class="form-control" id="idAdd" name="id">
           </div>
         </div>
         <div class="row mb-3">
@@ -116,7 +117,7 @@
             String
           </label>
           <div class="col-sm-8">
-            <input type="text" class="form-control" id="string" name="string">
+            <input type="text" class="form-control" id="stringAdd" name="string">
           </div>
         </div>
         <div class="row mb-3">
@@ -124,7 +125,7 @@
             Integer
           </label>
           <div class="col-sm-8">
-            <input type="number" class="form-control" id="integer" name="integer">
+            <input type="number" class="form-control" id="integerAdd" name="integer">
           </div>
         </div>
         <div class="row mb-3">
@@ -132,7 +133,7 @@
             Float
           </label>
           <div class="col-sm-8">
-            <input type="number" step="any" class="form-control" id="float" name="float">
+            <input type="number" step="any" class="form-control" id="floatAdd" name="float">
           </div>
         </div>
         <div class="row mb-3">
@@ -140,7 +141,7 @@
             Date
           </label>
           <div class="col-sm-4">
-            <input type="date" class="form-control" id="date" name="date">
+            <input type="date" class="form-control" id="dateAdd" name="date">
           </div>
         </div>
         <div class="row mb-3">
@@ -148,7 +149,7 @@
             Boolean
           </label>
           <div class="col-sm-8">
-            <select name="boolean" id="boolean" class="form-select">
+            <select name="boolean" id="booleanAdd" class="form-select">
               <option>Choose the boolean</option>
               <option value="true">True</option>
               <option value="false">False</option>
@@ -232,12 +233,12 @@
     $(document).ready(() => {
       $('#create-form').submit((event) => {
         event.preventDefault();
-        const number = $('#id').val()
-        const string = $('#string').val()
-        const integer = $('#integer').val()
-        const float = $('#float').val()
-        const date = $('#date').val()
-        const boolean = $('#boolean').val()
+        const number = $('#idAdd').val()
+        const string = $('#stringAdd').val()
+        const integer = $('#integerAdd').val()
+        const float = $('#floatAdd').val()
+        const date = $('#dateAdd').val()
+        const boolean = $('#booleanAdd').val()
         addData(number, string, integer, float, date, boolean)
       })
     });
@@ -326,12 +327,12 @@
         url: '/users',
         data: { number, string, integer, float, date, boolean }
       }).done((data) => {
-        $('#id').val('');
-        $('#string').val('');
-        $('#integer').val('');
-        $('#float').val('');
-        $('#date').val('');
-        $('#boolean').val('');
+        $('#idAdd').val('');
+        $('#stringAdd').val('');
+        $('#integerAdd').val('');
+        $('#floatAdd').val('');
+        $('#dateAdd').val('');
+        $('#booleanAdd').val('');
         loadData();
         toggleAddData();
       }).fail((error) => {
@@ -414,15 +415,35 @@
 
     const sort = (sortBy, sortMode) => {
 
-      let html = ` <tr>
-                    <th>No <i class="fa-solid fa-sort${sortBy == 'number' ? sortMode == 'asc' ? '-up' : '-down' : ''}" onClick="sort('number','${sortMode == 'asc' ? 'desc' : 'asc'}')"></i></th>
-                    <th>String <i class="fa-solid fa-sort${sortBy == 'string' ? sortMode == 'asc' ? '-up' : '-down' : ''}" onClick="sort('string','${sortMode == 'asc' ? 'desc' : 'asc'}')"></i></th>
-                    <th>Integer <i class="fa-solid fa-sort${sortBy == 'integer' ? sortMode == 'asc' ? '-up' : '-down' : ''}" onClick="sort('integer','${sortMode == 'asc' ? 'desc' : 'asc'}')"></i></th>
-                    <th>Float <i class="fa-solid fa-sort${sortBy == 'float' ? sortMode == 'asc' ? '-up' : '-down' : ''}" onClick="sort('float','${sortMode == 'asc' ? 'desc' : 'asc'}')"></i></th>
-                    <th>Date <i class="fa-solid fa-sort${sortBy == 'date' ? sortMode == 'asc' ? '-up' : '-down' : ''}" onClick="sort('date','${sortMode == 'asc' ? 'desc' : 'asc'}')"></i></th>
-                    <th>Boolean <i class="fa-solid fa-sort${sortBy == 'boolean' ? sortMode == 'asc' ? '-up' : '-down' : ''}" onClick="sort('boolean','${sortMode == 'asc' ? 'desc' : 'asc'}')"></i></th>
-                    <th>Actions</th>
-                </tr> `
+      let html = `<tr>
+                <th style="width: 6%;">
+                  No.
+                  <i class="fa  ${sortMode === 'asc' && sortBy === 'number' ? 'fa-sort-down' : sortMode === 'desc' && sortBy === 'number' ? 'fa-sort-up' : 'fa-sort'}" onClick = "sort('number', '${sortMode == 'asc' ? 'desc' : 'asc'}')" ></i>
+                </th>
+                <th style="width: 19%;">
+                  String
+                  <i class="fa  ${sortMode === 'asc' && sortBy === 'string' ? 'fa-sort-down' : sortMode === 'desc' && sortBy === 'string' ? 'fa-sort-up' : 'fa-sort'}" onClick = "sort('string', '${sortMode == 'asc' ? 'desc' : 'asc'}')"></i>
+                </th>
+                <th style="width: 14%;">
+                  Integer
+                  <i class="fa  ${sortMode === 'asc' && sortBy === 'integer' ? 'fa-sort-down' : sortMode === 'desc' && sortBy === 'integer' ? 'fa-sort-up' : 'fa-sort'}" onClick = "sort('integer', '${sortMode == 'asc' ? 'desc' : 'asc'}')"></i>
+                </th>
+                <th style="width: 14%;">
+                  Float
+                  <i class="fa  ${sortMode === 'asc' && sortBy === 'float' ? 'fa-sort-down' : sortMode === 'desc' && sortBy === 'float' ? 'fa-sort-up' : 'fa-sort'}" onClick = "sort('float', '${sortMode == 'asc' ? 'desc' : 'asc'}')"></i>
+                </th>
+                <th style="width: 19%;">
+                  Date
+                  <i class="fa  ${sortMode === 'asc' && sortBy === 'date' ? 'fa-sort-down' : sortMode === 'desc' && sortBy === 'date' ? 'fa-sort-up' : 'fa-sort'}" onClick = "sort('date', '${sortMode == 'asc' ? 'desc' : 'asc'}')"></i>
+                </th>
+                <th style="width: 14%;">
+                Boolean
+                <i class="fa  ${sortMode === 'asc' && sortBy === 'boolean' ? 'fa-sort-down' : sortMode === 'desc' && sortBy === 'boolean' ? 'fa-sort-up' : 'fa-sort'}" onClick = "sort('boolean', '${sortMode == 'asc' ? 'desc' : 'asc'}')"></i>
+                </th>
+                <th style="width: 14%;">
+                  Action
+                </th>
+              </tr>`
       $('#sorting').html(html)
       params = { ...params, sortBy, sortMode }
       loadData()
