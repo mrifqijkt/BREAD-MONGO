@@ -39,7 +39,7 @@ module.exports = function (db) {
     }
 
     if (boolean && checkboxBoolean === 'true' || checkboxBoolean === 'on') {
-      params['boolean'] = boolean 
+      params['boolean'] = boolean  
     }
 
     const limit = 3
@@ -114,3 +114,4 @@ module.exports = function (db) {
 
   return router;
 }
+// done
